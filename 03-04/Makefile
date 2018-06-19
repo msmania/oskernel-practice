@@ -1,6 +1,6 @@
 !include ..\Makefile.inc
 
-TARGET=02-01-boot.bin
+TARGET=03-04-boot.bin
 
 OBJS=\
 	$(OBJDIR)\boot.bin\
