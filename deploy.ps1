@@ -11,7 +11,7 @@ Process {
   Stop-VM -Name $VMName -TurnOff
   Mount-DiskImage $Vhd
   Write-Host $DD if=$Image of=$Device bs=512 count=2
-  & $DD if=$Image of=$Device bs=512 count=2
+  & $DD if=$Image of=$Device bs=512 count=3
   Dismount-DiskImage $Vhd
   Start-VM -Name $VMName
 }
