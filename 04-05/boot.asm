@@ -36,37 +36,41 @@ read:
 
   cli
 
-  mov al, 0x11 ; init PIC
-  out 0x20, al ; master PIC
+  ; ICW1: PIC initialization
+  mov al, 0x11 ; IC4=1
+  out 0x20, al
   dw  0x00eb, 0x00eb ; jmp $+2, jmp $+2
-  out 0xA0, al ; slave PIC
+  out 0xA0, al
   dw  0x00eb, 0x00eb
 
-  mov al, 0x20 ; master PIC interrupt start
+  ; ICW2: remapping
+  mov al, 0x20 ; IRQ# offset for master PIC
   out 0x21, al
   dw  0x00eb, 0x00eb
-  mov al, 0x28 ; slave PIC interrupt start
+  mov al, 0x28 ; IRQ# offset for slave PIC
   out 0xA1, al
   dw  0x00eb, 0x00eb
 
-  mov al, 0x04 ; master PIC IRQ#2
-  out 0x21, al ; connects to slave PIC
+  ; ICW3
+  mov al, 0x04 ; Master PIC's IRQ#2 connects to slave
+  out 0x21, al
   dw  0x00eb, 0x00eb
-  mov al, 0x02 ; slave PIC connects to master PIC's
-  out 0xA1, al ; IRQ#2
+  mov al, 0x02 ; Slave PIC's connects to master's IRQ#2
+  out 0xA1, al
   dw  0x00eb, 0x00eb
 
-  mov al, 0x01 ; use 8086 mode
+  ; ICW4
+  mov al, 0x01 ; uPM=1: 8086 mode
   out 0x21, al
   dw  0x00eb, 0x00eb
   out 0xA1, al
   dw  0x00eb, 0x00eb
 
-  mov al, 0xFF ; all interruption for slave PIC
-  out 0xA1, al ; are blocked
+  mov al, 0xFF ; Block all interruption for slave PIC
+  out 0xA1, al
   dw  0x00eb, 0x00eb
-  mov al, 0xFB ; all interruption for master PIC except IRQ#2
-  out 0x21, al ; are blocked
+  mov al, 0xFB ; Block all interruption for master PIC except IRQ#2
+  out 0x21, al
 
   lgdt [gdtr]
 

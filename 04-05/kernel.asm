@@ -138,6 +138,7 @@ isr_32_keyboard:
   push ds
   pushfd
 
+  ; retrieve scan code to receive next interruption
   in al, 0x60
 
   mov al, 0x20
