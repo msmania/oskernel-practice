@@ -74,7 +74,7 @@ printf_end:
 msgPMode db "We are in Protected Mode", 0
 msg_isr_ignore db "This is an ignorable interrupt", 0
 msg_isr_32_timer db ".This is the timer interrupt", 0
-msg_isr_32_keyboard db ".This is the keyboard interrupt", 0
+msg_isr_33_keyboard db ".This is the keyboard interrupt", 0
 
 idtr: dw 256 * 8 ; IDT Limit
       dd 0       ; IDT Base
@@ -130,7 +130,7 @@ isr_32_timer:
   pop gs
   iret
 
-isr_32_keyboard:
+isr_33_keyboard:
   pushad
   push gs
   push fs
@@ -147,9 +147,9 @@ isr_32_keyboard:
   mov ax, VideoSelector
   mov es, ax
   mov edi, (80 * 4 * 2)
-  lea esi, [msg_isr_32_keyboard]
+  lea esi, [msg_isr_33_keyboard]
   call printf
-  inc byte [msg_isr_32_keyboard]
+  inc byte [msg_isr_33_keyboard]
 
   popfd
   pop ds
@@ -174,7 +174,7 @@ idt_timer:
   dw 0x0001
 
 idt_keyboard:
-  dw isr_32_keyboard
+  dw isr_33_keyboard
   dw 0x08
   db 0
   db 0x8E
