@@ -66,7 +66,7 @@ PM_Start:
 
   push dword UserDataSelector ; ss
   push esp                    ; esp
-  push dword 0x200            ; eflags
+  push dword 0x200            ; eflags: IF=1
   push dword UserCodeSelector ; cs
   lea eax, [user_process]
   push eax                    ; eip

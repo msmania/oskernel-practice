@@ -106,22 +106,18 @@ loop_idt:
   lea edx, [User5regs]
   mov [eax], edx
 
+yet:
   mov eax, [CurrentTask]
   add eax, TaskList
   mov ebx, [eax]
   jmp sched
 
 scheduler:
-  lea esi, [esp]
-
-  xor eax, eax
   mov eax, [CurrentTask]
   add eax, TaskList
-
   mov edi, [eax]
-
+  lea esi, [esp]
   mov ecx, 17
-
   rep movsd
   add esp, 68
 
@@ -131,12 +127,7 @@ scheduler:
   cmp eax, ebx
   jne yet
   mov byte [CurrentTask], 0
-
-yet:
-  xor eax, eax
-  mov eax, [CurrentTask]
-  add eax, TaskList
-  mov ebx, [eax]
+  jmp yet
 
 sched:
   mov [tss_esp0], esp
@@ -467,13 +458,13 @@ isr_128_soft_int:
 
 ret_from_int:
   xor eax, eax
-  mov eax, [esp+52]
+  mov eax, [esp+52] ; cs register in the stack
   and eax, 0x00000003
   xor ebx, ebx
   mov bx, cs
   and ebx, 0x00000003
   cmp eax, ebx
-  ja scheduler
+  ja scheduler ; jump if interrupted from user-mode
 
   popad
   pop ds
