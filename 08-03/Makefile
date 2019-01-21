@@ -1,42 +1,31 @@
-!include ..\Makefile.inc
+include ../Makefile.inc
 
 TARGET=08-03-boot.bin
 
-OBJS=\
-	$(OBJDIR)\boot.bin\
-	$(OBJDIR)\setup.bin\
-	$(OBJDIR)\kernel.bin\
-	$(OBJDIR)\user_program1.bin\
-	$(OBJDIR)\user_program2.bin\
-	$(OBJDIR)\user_program3.bin\
-	$(OBJDIR)\user_program4.bin\
-	$(OBJDIR)\user_program5.bin\
+SRCS=$(wildcard $(SRCDIR)/*.asm)
+OBJS=$(addprefix $(OBJDIR)/, $(notdir $(SRCS:.asm=.bin)))
 
-all: $(OUTDIR)\$(TARGET)
-
-run:
-	$(PS) -file ..\deploy.ps1\
-		-DD $(DD)\
-		-Image $(OUTDIR)\$(TARGET)\
-		-Device $(DEVICE)\
-		-Vhd $(VHDX)\
-		-VMName $(VMNAME)\
-
-$(OUTDIR)\$(TARGET): $(OBJS)
-	@if not exist $(OUTDIR) mkdir $(OUTDIR)
-	copy /b $(OBJDIR)\boot.bin\
-    + $(OBJDIR)\setup.bin\
-    + $(OBJDIR)\kernel.bin\
-    + $(OBJDIR)\user_program1.bin\
-    + $(OBJDIR)\user_program2.bin\
-    + $(OBJDIR)\user_program3.bin\
-    + $(OBJDIR)\user_program4.bin\
-    + $(OBJDIR)\user_program5.bin $@
-
-.asm{$(OBJDIR)}.bin:
-	@if not exist $(OBJDIR) mkdir $(OBJDIR)
-	$(NASM) -f bin -o $@ $**
+all: $(OUTDIR)/$(TARGET)
 
 clean:
-	@if exist $(OBJDIR) $(RD) $(OBJDIR)
-	@if exist $(OUTDIR)\$(TARGET) $(RM) $(OUTDIR)\$(TARGET)
+	$(RM) $(OBJS) $(OUTDIR)/$(TARGET)
+
+run:
+	$(QEMU)\
+		$(QEMU_OPT)\
+		-drive format=raw,file=$(OUTDIR)/$(TARGET)
+
+$(OBJDIR)/%.bin: $(SRCDIR)/%.asm
+	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
+	$(NASM) -f bin -o $@ $^
+
+$(OUTDIR)/$(TARGET): $(OBJS)
+	@[ -d $(OUTDIR) ] || mkdir -p $(OUTDIR)
+	cat $(OBJDIR)/boot.bin\
+	    $(OBJDIR)/setup.bin\
+	    $(OBJDIR)/kernel.bin\
+	    $(OBJDIR)/user_program1.bin\
+	    $(OBJDIR)/user_program2.bin\
+	    $(OBJDIR)/user_program3.bin\
+	    $(OBJDIR)/user_program4.bin\
+	    $(OBJDIR)/user_program5.bin>$@

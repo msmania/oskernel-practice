@@ -1,20 +1,24 @@
-!include ..\Makefile.inc
+include ../Makefile.inc
 
 TARGET=01-01-boot.bin
 
-all: $(OUTDIR)\$(TARGET)
+SRCS=$(wildcard $(SRCDIR)/*.asm)
+OBJS=$(addprefix $(OBJDIR)/, $(notdir $(SRCS:.asm=.bin)))
 
-run:
-	$(PS) -file ..\deploy.ps1\
-		-DD $(DD)\
-		-Image $(OUTDIR)\01-01-boot.bin\
-		-Device $(DEVICE)\
-		-Vhd $(VHDX)\
-		-VMName $(VMNAME)\
-
-$(OUTDIR)\$(TARGET): boot.asm
-	@if not exist $(OUTDIR) mkdir $(OUTDIR)
-	$(NASM) -f bin -o $@ $**
+all: $(OUTDIR)/$(TARGET)
 
 clean:
-	@if exist $(OUTDIR)\$(TARGET) $(RM) $(OUTDIR)\$(TARGET)
+	$(RM) $(OBJS) $(OUTDIR)/$(TARGET)
+
+run:
+	$(QEMU)\
+		$(QEMU_OPT)\
+		-drive format=raw,file=$(OUTDIR)/$(TARGET)
+
+$(OBJDIR)/%.bin: $(SRCDIR)/%.asm
+	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
+	$(NASM) -f bin -o $@ $^
+
+$(OUTDIR)/$(TARGET): $(OBJS)
+	@[ -d $(OUTDIR) ] || mkdir -p $(OUTDIR)
+	cp $(OBJDIR)/boot.bin $@

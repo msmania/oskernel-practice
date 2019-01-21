@@ -25,7 +25,7 @@ read:
   mov es, ax
   mov bx, 0
   mov ah, 2 ; into es:bx
-  mov al, 8 ; load 8 sectors
+  mov al, 7 ; load 7 sectors
   mov ch, 0 ; cylinder #0
   mov cl, 2 ; from sector #2
   mov dh, 0 ; Head=0

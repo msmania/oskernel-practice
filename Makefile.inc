@@ -1,11 +1,12 @@
-RD=rd/s/q
-RM=del/q
-DD=D:\tools\dd.exe
-NASM=D:\nasm\latest\nasm.exe
-PS=powershell -executionpolicy remotesigned
+RM=rm
+QEMU=qemu-system-i386
+NASM=nasm
 
-OUTDIR=..\bin
+OUTDIR=../bin
 OBJDIR=obj
-VMNAME=Raw
-VHDX=S:\Hyper-V\Raw\boot.vhdx
-DEVICE=\??\PhysicalDrive4
+SRCDIR=.
+
+QEMU_OPT=\
+  -cpu max\
+  -smp 1\
+  -m 2048\
