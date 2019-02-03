@@ -18,6 +18,7 @@ CFLAGS=\
 	-Wall\
 	-m32\
 	-fno-stack-protector\
+	-fno-pic\
 
 LFLAGS=\
 	-m32\

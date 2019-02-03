@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-TARGET=09-05
+TARGET=09-02b
 
 SRCS=$(wildcard $(SRCDIR)/*.asm) $(wildcard $(SRCDIR)/*.c)
 OBJS=$(addprefix $(OBJDIR)/, $(notdir $(patsubst %.c,%.o,$(SRCS:.asm=.o))))

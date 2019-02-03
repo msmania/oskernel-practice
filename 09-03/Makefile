@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-TARGET=09-05-kernel.img
+TARGET=09-03-kernel.img
 
 BOOT_OBJS=\
 	$(OBJDIR)/boot.o\
@@ -47,7 +47,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 $(OBJDIR)/kernel.bin: $(KERNEL_OBJS)
 	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
 	$(eval P=$(OBJDIR)/kernel.p)
-	ld $(LDFLAGS) -o $(P) -Ttext 0xC0000000 -e start_kernel $^
+	ld $(LDFLAGS) -o $(P) -Ttext 0xC0000000 -Tdata 0xC0001800 -e start_kernel $^
 	objcopy $(OBJCOPY_FLAGS) $(P) $@
 	rm $(P)
 
