@@ -573,5 +573,5 @@ isr_17:
 segment .data
 
 idtr:
-  dw 256 * 8 - 1
+  dw 256 * 8
   dd IDT_BASE

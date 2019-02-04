@@ -4,6 +4,6 @@ VideoSelector    equ 0x18
 TSSSelector      equ 0x20
 UserCodeSelector equ 0x28+3
 UserDataSelector equ 0x30+3
-NumKernelSector  equ 11
+NumKernelSector  equ 13
 IDT_BASE         equ 0xc0002000
 TSS_WHERE        equ 0x90000
