@@ -82,7 +82,8 @@ isr_ignore:
   mov al, 0x20
   out 0x20, al
 
-  call IgnorableInterrupt
+  lea eax, [IgnorableInterrupt]
+  call eax
 
   popad
   pop ds
@@ -107,8 +108,10 @@ isr_32_timer:
   mov al, 0x20
   out 0x20, al
 
-  call TimerHandler
-  call schedule
+  lea eax, [TimerHandler]
+  call eax
+  lea eax, [schedule]
+  call eax
 
   popad
   pop ds
@@ -130,14 +133,15 @@ isr_33_keyboard:
   mov fs, ax
   mov gs, ax
 
-  ; retrieve scan code to receive next interruption
-  in al, 0x60
-
   mov al, 0x20
   out 0x20, al
 
+  ; retrieve scan code to receive next interruption
+  in al, 0x60
+
   push eax
-  call KeyboardHandler
+  lea eax, [KeyboardHandler]
+  call eax
   add esp, 4
 
   popad
@@ -163,7 +167,8 @@ isr_38_floppy:
   mov al, 0x20
   out 0x20, al
 
-  call FloppyHandler
+  lea eax, [FloppyHandler]
+  call eax
 
   popad
   pop ds
@@ -187,7 +192,8 @@ isr_128_soft_int:
   mov gs, ax
   pop eax
 
-  call SystemCallEntry
+  lea eax, [SystemCallEntry]
+  call eax
 
   popad
   pop ds
@@ -209,7 +215,8 @@ isr_00:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_00
+  lea eax, [H_isr_00]
+  call eax
 
   popad
   pop ds
@@ -231,7 +238,8 @@ isr_01:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_01
+  lea eax, [H_isr_01]
+  call eax
 
   popad
   pop ds
@@ -253,7 +261,8 @@ isr_02:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_02
+  lea eax, [H_isr_02]
+  call eax
 
   popad
   pop ds
@@ -275,7 +284,8 @@ isr_03:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_03
+  lea eax, [H_isr_03]
+  call eax
 
   popad
   pop ds
@@ -297,7 +307,8 @@ isr_04:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_04
+  lea eax, [H_isr_04]
+  call eax
 
   popad
   pop ds
@@ -319,7 +330,8 @@ isr_05:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_05
+  lea eax, [H_isr_05]
+  call eax
 
   popad
   pop ds
@@ -341,7 +353,8 @@ isr_06:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_06
+  lea eax, [H_isr_06]
+  call eax
 
   popad
   pop ds
@@ -363,7 +376,8 @@ isr_07:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_07
+  lea eax, [H_isr_07]
+  call eax
 
   popad
   pop ds
@@ -385,7 +399,8 @@ isr_08:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_08
+  lea eax, [H_isr_08]
+  call eax
 
   popad
   pop ds
@@ -407,7 +422,8 @@ isr_09:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_09
+  lea eax, [H_isr_09]
+  call eax
 
   popad
   pop ds
@@ -429,7 +445,8 @@ isr_10:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_10
+  lea eax, [H_isr_10]
+  call eax
 
   popad
   pop ds
@@ -451,7 +468,8 @@ isr_11:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_11
+  lea eax, [H_isr_11]
+  call eax
 
   popad
   pop ds
@@ -473,7 +491,8 @@ isr_12:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_12
+  lea eax, [H_isr_12]
+  call eax
 
   popad
   pop ds
@@ -495,7 +514,8 @@ isr_13:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_13
+  lea eax, [H_isr_13]
+  call eax
 
   popad
   pop ds
@@ -517,7 +537,8 @@ isr_14:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_14
+  lea eax, [H_isr_14]
+  call eax
 
   popad
   pop ds
@@ -539,7 +560,8 @@ isr_15:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_15
+  lea eax, [H_isr_15]
+  call eax
 
   popad
   pop ds
@@ -561,7 +583,8 @@ isr_17:
   mov fs, ax
   mov gs, ax
 
-  call H_isr_17
+  lea eax, [H_isr_17]
+  call eax
 
   popad
   pop ds

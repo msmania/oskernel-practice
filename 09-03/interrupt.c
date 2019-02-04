@@ -10,7 +10,7 @@ void SetInterrupts() {
   int i;
   TimerPastBoot = 0;
   for (i = 0; i < 256; ++i)
-    PutIDT(i, (void*)&isr_ignore, 0x8E); 
+    PutIDT(i, (void*)&isr_ignore, 0x8E);
   PutIDT(0x00, (void*)&isr_00, 0x8E);
   PutIDT(0x01, (void*)&isr_01, 0x8E);
   PutIDT(0x02, (void*)&isr_02, 0x8E);
@@ -78,8 +78,7 @@ void IgnorableInterrupt() {
 }
 
 void TimerHandler() {
-  char *s = "Time: ";
-  printk(0, 0, s);
+  printk(0, 0, "Time: ");
   print_hex(6, 0, TimerPastBoot);
   TimerPastBoot++;
 }
@@ -99,8 +98,7 @@ void delay(int tenMillisecond) {
 }
 
 void KeyboardHandler(char scan) {
-  char *s = "Scan code: ";
-  printk(20, 0, s);
+  printk(20, 0, "Scan code: ");
   print_hex(31, 0, (scan & 0xFF));
   trap = 0;
 }

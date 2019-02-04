@@ -15,6 +15,7 @@ void start_kernel() {
   unsigned int *FirstTaskURegisters = (unsigned int*)&uRegisters[0];
   init_task();
   SetInterrupts();
+  for (;;);
   LoadUserPrograms();
 
   __asm__ __volatile__(
