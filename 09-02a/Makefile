@@ -5,22 +5,28 @@ TARGET=09-02a
 SRCS=$(wildcard $(SRCDIR)/*.asm) $(wildcard $(SRCDIR)/*.c)
 OBJS=$(addprefix $(OBJDIR)/, $(notdir $(patsubst %.c,%.bin,$(SRCS:.asm=.bin))))
 
+KERNEL_OBJS=\
+	$(OBJDIR)/util.o\
+	$(OBJDIR)/main.o\
+
 all: $(OUTDIR)/$(TARGET)
 
 clean:
-	$(RM) $(OBJS) #$(OUTDIR)/$(TARGET)
+	$(RM) $(KERNEL_OBJS) $(OUTDIR)/$(TARGET)
 
-$(OBJDIR)/%.bin: $(SRCDIR)/%.asm
+$(OBJDIR)/%.o: $(SRCDIR)/%.asm
 	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
-	echo $(NASM) -f bin -o $@ $^
+	$(NASM) -f coff -o $@ $^
+	objdump -D $@ >$@.disas
 
-$(OBJDIR)/%.bin: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
-	$(eval O=$(patsubst %.bin,%.o,$@))
-	$(eval P=$(patsubst %.bin,%.p,$@))
-	gcc $(CFLAGS) -o $(O) $^
-	ld $(LDFLAGS) -o $(P) -Ttext 0x00 -Tdata 0x200 -e main $(O)
-	objcopy -R .note -R .comment -S -O binary $(P) $@
+	gcc $(CFLAGS) -o $@ $^
+	objdump -D $@ >$@.disas
 
-$(OUTDIR)/$(TARGET): $(OBJS)
+$(OUTDIR)/$(TARGET): $(KERNEL_OBJS)
 	@[ -d $(OUTDIR) ] || mkdir -p $(OUTDIR)
+	$(eval P=$(shell A="$^"; B=($$A); echo $${B[0]//.\o/\.p}))
+	ld $(LDFLAGS) -o ${P} -Ttext 0x00 -Tdata 0x200 -e main $^
+	objcopy $(OBJCOPY_FLAGS) ${P} $@
+	ndisasm -b32 $@ >$(OBJDIR)/01.bin.disas
