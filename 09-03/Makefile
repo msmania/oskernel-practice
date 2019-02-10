@@ -48,7 +48,8 @@ $(OBJDIR)/kernel.bin: $(KERNEL_OBJS)
 	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
 	$(eval P=$(OBJDIR)/kernel.p)
 	ld $(LDFLAGS) -o $(P) -Ttext 0xC0000000 -Tdata 0xC0001800 -e start_kernel $^
-	objcopy $(OBJCOPY_FLAGS) $(P) $@
+	objcopy $(OBJCOPY_FLAGS) --gap-fill=0xcc --pad-to=0xC0001A00 $(P) $@
+	ndisasm -b32 $@ >$(OBJDIR)/kernel.disas
 	rm $(P)
 
 $(OBJDIR)/%.bin: $(OBJDIR)/%.o $(OBJDIR)/print_string.o
@@ -64,8 +65,9 @@ $(OBJDIR)/%.bin: $(OBJDIR)/%.o $(OBJDIR)/print_string.o
 		elif [[ "$^" == *user_program4* ]]; then \
 			echo 0x80003000; \
 		fi))
+	$(eval S=$(shell printf "0x%x\n" $$((${ADDR}+512))))
 	ld $(LDFLAGS) -o ${P} -Ttext ${ADDR} -e main $^
-	objcopy $(OBJCOPY_FLAGS) ${P} $@
+	objcopy $(OBJCOPY_FLAGS) --gap-fill=0xcc --pad-to=${S} ${P} $@
 	rm ${P}
 
 $(OUTDIR)/$(TARGET): $(MODULES)
