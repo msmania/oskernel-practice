@@ -15,7 +15,6 @@ void start_kernel() {
   unsigned int *FirstTaskURegisters = (unsigned int*)&uRegisters[0];
   init_task();
   SetInterrupts();
-  for (;;);
   LoadUserPrograms();
 
   __asm__ __volatile__(
@@ -38,14 +37,11 @@ void start_kernel() {
 }
 
 void LoadUserPrograms() {
-  ReadSector(0, 0, 15, (unsigned char*)0x10000, (unsigned char*)0x80000000);
-  ReadSector(0, 0, 16, (unsigned char*)0x10000, (unsigned char*)0x80000200);
-  ReadSector(0, 0, 17, (unsigned char*)0x10000, (unsigned char*)0x80001000);
-  ReadSector(0, 0, 18, (unsigned char*)0x10000, (unsigned char*)0x80001200);
-  ReadSector(1, 0,  1, (unsigned char*)0x10000, (unsigned char*)0x80002000);
-  ReadSector(1, 0,  2, (unsigned char*)0x10000, (unsigned char*)0x80002200);
-  ReadSector(1, 0,  3, (unsigned char*)0x10000, (unsigned char*)0x80003000);
-  ReadSector(1, 0,  4, (unsigned char*)0x10000, (unsigned char*)0x80003200);
+  ReadSector(0, 0, 20, (unsigned char*)0x10000, (unsigned char*)0x80000000);
+  ReadSector(0, 0, 21, (unsigned char*)0x10000, (unsigned char*)0x80001000);
+  ReadSector(0, 0, 22, (unsigned char*)0x10000, (unsigned char*)0x80002000);
+  ReadSector(0, 0, 23, (unsigned char*)0x10000, (unsigned char*)0x80003000);
+  for (;;);
 }
 
 void printk(int x, int y, char *str) {

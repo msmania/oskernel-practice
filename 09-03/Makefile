@@ -47,8 +47,8 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 $(OBJDIR)/kernel.bin: $(KERNEL_OBJS)
 	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
 	$(eval P=$(OBJDIR)/kernel.p)
-	ld $(LDFLAGS) -o $(P) -Ttext 0xC0000000 -Tdata 0xC0001800 -e start_kernel $^
-	objcopy $(OBJCOPY_FLAGS) --gap-fill=0xcc --pad-to=0xC0001A00 $(P) $@
+	ld $(LDFLAGS) -o $(P) -Ttext 0xC0000000 -Tdata 0xC0001A00 -e start_kernel $^
+	objcopy $(OBJCOPY_FLAGS) --gap-fill=0xcc --pad-to=0xC0002000 $(P) $@
 	ndisasm -b32 $@ >$(OBJDIR)/kernel.disas
 	rm $(P)
 

@@ -33,6 +33,9 @@ void ReadSector(int head,
   unsigned int src, dest;
   char result[7];
 
+  for (i = 0; i < 512; ++i)
+    source[i] = 0xfe;
+
   src = (unsigned int)source;
   dest = (unsigned int)destiny;
 
@@ -50,6 +53,9 @@ void ReadSector(int head,
     else
       break;
   }
+
+  if (i == 5)
+    for (;;);
 
   initializeDMA(page, offset);
 
