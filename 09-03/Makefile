@@ -66,7 +66,7 @@ $(OBJDIR)/%.bin: $(OBJDIR)/%.o $(OBJDIR)/print_string.o
 			echo 0x80003000; \
 		fi))
 	$(eval S=$(shell printf "0x%x\n" $$((${ADDR}+512))))
-	ld $(LDFLAGS) -o ${P} -Ttext ${ADDR} -e main $^
+	ld $(LDFLAGS) -o ${P} -Ttext ${ADDR} -e entrypoint $^
 	objcopy $(OBJCOPY_FLAGS) --gap-fill=0x00 --pad-to=${S} ${P} $@
 	rm ${P}
 

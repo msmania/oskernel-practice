@@ -1,16 +1,11 @@
 #include "print_string.h"
 
-void print_it();
-
-int main() {
-  print_it();
+int enrtypoint() {
+  main();
 }
 
-void print_it() {
-  char *s = ".I'm running now.";
-  for (;;) {
-    print_string(25, 10, "This is User2");
-    print_string(25, 11, s);
-    ++s[0];
-  }
+void main() {
+  print_user_message(25, 10,
+                     "This is User2",
+                     ".I'm running now.");
 }

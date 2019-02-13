@@ -15,3 +15,11 @@ void print_string(int x, int y, char *str) {
     :
     : "m"(x), "m"(y), "m"(str));
 }
+
+void print_user_message(int x, int y, char *msg1, char *msg2) {
+  for (;;) {
+    print_string(x, y, msg1);
+    print_string(x, y + 1, msg2);
+    ++msg2[0];
+  }
+}
