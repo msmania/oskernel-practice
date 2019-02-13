@@ -192,8 +192,8 @@ isr_128_soft_int:
   mov gs, ax
   pop eax
 
-  lea eax, [SystemCallEntry]
-  call eax
+  mov dword [thunk], SystemCallEntry
+  call [thunk]
 
   popad
   pop ds
@@ -201,6 +201,8 @@ isr_128_soft_int:
   pop fs
   pop gs
   iret
+
+thunk: dd 0
 
 isr_00:
   push gs

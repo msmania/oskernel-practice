@@ -19,7 +19,7 @@ void start_kernel() {
 
   __asm__ __volatile__(
       "cli\n\t"
-      "mov $0x20, %%ax\n\t"
+      "mov %2, %%ax\n\t"
       "ltr %%ax\n\t"
       "mov %%esp, %0\n\t"
       "mov %1, %%esp\n\t"
@@ -30,9 +30,9 @@ void start_kernel() {
       "pop %%gs\n\t"
       "sti\n\t"
       "iret\n\t"
-      : "=m"(tss->esp0)
-        : "m"(FirstTaskURegisters));
-  
+      : "=r"(tss->esp0)
+      : "m"(FirstTaskURegisters), "n"(TSSSelector));
+
   for (;;);
 }
 
@@ -41,7 +41,6 @@ void LoadUserPrograms() {
   ReadSector(0, 0, 21, (unsigned char*)0x10000, (unsigned char*)0x80001000);
   ReadSector(0, 0, 22, (unsigned char*)0x10000, (unsigned char*)0x80002000);
   ReadSector(0, 0, 23, (unsigned char*)0x10000, (unsigned char*)0x80003000);
-  for (;;);
 }
 
 void printk(int x, int y, char *str) {

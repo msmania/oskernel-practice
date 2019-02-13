@@ -12,7 +12,7 @@ void init_task() {
 
   eip = 0x80000000;
 
-  for (i = 0; i < 5; ++i) {
+  for (i = 0; i < NUM_MAX_TASK; ++i) {
     uRegisters[i].eip = eip;
     uRegisters[i].cs = UserCodeSelector;
     uRegisters[i].eflags = 0x200;
